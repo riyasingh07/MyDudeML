@@ -5,7 +5,7 @@ import argparse
 wgsim_path = "wgsim"
 bedtools_path = "bedtools"
 samtools_path = "samtools"
-print("DudeML implemenation By \n\t RIYA KUMARI SINGH \n")
+print("DudeML implemenation By\t Riya Kumari Singh \n")
 def rounder(x,y):
 	return int(round(x / float(y))) * y
 
