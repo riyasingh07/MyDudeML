@@ -100,8 +100,9 @@ I used the provided DiNV virus genome and repeat locations.
 Following that, I simulated CNVs for a homozygous individual, requiring 1 set of chromosomes to be generated. 
 It's important that the training data is as similar as possible to the sample being tested.
 
-Cloning the repo
+Cloning the project repository after changing the environment
 
+    source activate dudeml
     git clone https://github.com/riyasingh07/MyDudeML.git
     cd MyDudeML/
     
