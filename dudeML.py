@@ -190,6 +190,10 @@ if argsDict['mode'] in ['predict'] or function == "predict":
 	from sklearn.ensemble import RandomForestClassifier
 	from sklearn.datasets import make_classification
 	import joblib
+	import seaborn as sn
+	import matplotlib.pyplot as plt
+
+	from sklearn.metrics import confusion_matrix
 	from sklearn.tree import DecisionTreeClassifier
 	from sklearn.neural_network import MLPClassifier
 	from sklearn.ensemble import ExtraTreesClassifier
@@ -199,10 +203,14 @@ if argsDict['mode'] in ['predict'] or function == "predict":
 			print("Classifying over a single training set")
 		clf = joblib.load(args.TRAIN)
 		clf2 = joblib.load(args.TRAIN + "2")
+
 		input = args.INPUT
 		test_in = pd.read_csv(args.INPUT,header=None,sep="\t")
 		output = args.OUTPUT
+		
+
 		test_in2 = test_in.drop(test_in[[0,1,2,3]], axis=1)
+		actual1=test_in2
 		test_Y = []
 		test_in2.columns = list(range(0,len(test_in2.columns)))
 		test_in2_y = []
@@ -216,6 +224,12 @@ if argsDict['mode'] in ['predict'] or function == "predict":
 		test_in2_yA.extend(list(pd.DataFrame(clf.predict_proba(test_in2),columns=None).max(axis=1)))
 		test_in2_yA2.extend(list(pd.DataFrame(clf2.predict_proba(test_in2),columns=None).max(axis=1)))
 		out_df = pd.DataFrame({"chr":list(test_in[0]), "start":list(test_in[1]), "end":list(test_in[2]), "ID":list(test_in[3]), "coverage":list(test_in2[(len(test_in2.columns)-4)/2]) ,"CNV":test_in2_y,"CNVprob":test_in2_yA,"ploidy":test_in2_y2,"ploidyprob":test_in2_yA2})
+		matrix = confusion_matrix([round(x*1.4/5.75) for x in actual1[21]],[round(x*1.4/9.625) for x in out_df['coverage']])
+		print('Confusion matrix : \n',matrix)
+		sn.set(font_scale=1.4) # for label size
+		sn.heatmap(matrix, annot=True, annot_kws={"size": 16}) # font size
+
+		plt.show()
 		out_df.to_csv(output,sep="\t",index =False,header=None)
 	elif os.path.isfile(args.TRAIN) == False and os.path.isdir(args.TRAIN) == True:
 		if args.QUIET == False:
