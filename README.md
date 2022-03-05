@@ -4,7 +4,7 @@ By- RIYA KUMARI SINGH
 
 # 1. Requirements
 A number of programs are required to install initially.
-Most of them are based only on Linux OS, so it is mandatory to run the code in Linux environment
+Most of them are based only on Linux OS, so it is **mandatory to run the code in Linux** environment
 ## Python-based:
 * Python3
 * pandas
@@ -26,75 +26,7 @@ ONE TIME SETUPS:
 	conda install -n dudeml -c bioconda samtools=1.11 --force-reinstall
 	
 
-# 2. Functions
-Subfunctions of the dudeML script, each function provides a specific role and requires differing inputs (described by running the help function of the tool).
-1. **winStat**
-Finds the average coverage of a window in the chromosome, relative to the average chromosome coverage.
-2. **fvecSample**
-Reformats the bedfile with coverage information into sets of windows surrounding a focal window.
-3. **fvecTrain**
-Reformats the bedfile with coverage information into sets of windows surrounding a focal window. Also includes information on if a CNV is present in the window, and the estimated number of copies of that window per chromosome.
-4. **simCNV**
-Generate coordinates for random CNVs in the fasta file input, after accounting for repetitive content.
-5. **recreateTotal**
-If already known deletions and duplications are being used in the training data, this function skips the simulation of CNVs and instead generates a file with positions where CNVs should be, for simChrs.
-6. **simChr**
-Masks known repetitive content in the given chromosome and generates chromosomes with simulated CNVs.
-7. **classify**
-Given a training file (generated in formatTrain) and a sample file (generated in formatSample), will predicted windows with CNVs based on coverage and standard deviation of coverage.
-8. **predict**
-Given a training file (generated in formatTrain) and a sample file (generated in formatSample), will predicted windows with CNVs based on coverage and standard deviation of coverage.
-9. **simReads**
-Simulates read pairs of chosen length to a certain coverage of the chosen chromosome, requires WGsim.
-10. **subTrain**
-Downsample a training file by a certain percentage or to a certain number of each category. 
-11. **summarize**
-Combines called CNVs, and if known CNVs are provided, tells you if called CNVs are True-positives or otherwise.
-12. **winStatExtra**
-Creates summary windows based on known coverage estimates.
-13. **covSummary**
-Summarizes the coverage of each chromosome in the genomeCoverageBed file.
-
-# 3. Input file formats
-## Fasta
-The reference sequences for mapping and for generating training files, in the following format:
->\>Chr1
-
->aagagcctatatca
-
->\>Chr2
-
->aagagcctatatca
-
-## BAM files
-A binary file containing short reads mapped to a repeat masked reference genome, used as input for genomeCoverageBed within dudeML.
-
-
-## Duplications
-A bed file of known (or simulated) duplications, with the number of copies per chromosome and the frequency of the duplication in the sampled data (e.g. the number of chromosomes with this duplication/ the total number of chromosomes):
->Chr1	1000	1344	dup	3	1.0
-
->Chr1	2455	6700	dup	2	0.5
-
->Chr1	34501	36119	dup	2	1.0
-
->Chr1	45117	48932	dup	4	0.5
-
-## Deletions
-A bed file of known (or simulated) deletions, with the number of copies per chromosome and the frequency of the deletion in the sampled data (e.g. the number of chromosomes with this deletion/ the total number of chromosomes):
->Chr1	1000	1344	del	0	1.0
-
->Chr1	2455	6700	del	0	0.5
-
->Chr1	34501	36119	del	0	1.0
-
->Chr1	45117	48932	del	0	0.5
-
-## Fvec files
-A type of bed file, containing information on CNVs and copy number if a training file, and containing strain ID if a sample file. Reformats the bedfile from winStat to a feature vector, summarizing the windows around the focal window.
->2L	22240500	22240550	N	1.0	0.64	0.151	0.92	0.071	1.04	0.134	1.04	0.101	1.2	0.075	1.12	0.112	1.44	0.132	1.12	0.168	1.12	0.124	1.6	0.163	1.42	0.145
-
-# 4. A simple walkthrough
+# 2. A simple walkthrough
 ## A. Simulate training data
 I used the provided DiNV virus genome and repeat locations.
 Following that, I simulated CNVs for a homozygous individual, requiring 1 set of chromosomes to be generated. 
@@ -165,3 +97,70 @@ Then the generated training and test sets can be used to find CNVs.
 	
 	python3 dudeML.py predict -i unknownCNV_50_sample.bed -t knownCNV_50_train.bed -o unknownCNV_50_pred.bed
 
+# 3. Functions
+Subfunctions of the dudeML script, each function provides a specific role and requires differing inputs (described by running the help function of the tool).
+1. **winStat**
+Finds the average coverage of a window in the chromosome, relative to the average chromosome coverage.
+2. **fvecSample**
+Reformats the bedfile with coverage information into sets of windows surrounding a focal window.
+3. **fvecTrain**
+Reformats the bedfile with coverage information into sets of windows surrounding a focal window. Also includes information on if a CNV is present in the window, and the estimated number of copies of that window per chromosome.
+4. **simCNV**
+Generate coordinates for random CNVs in the fasta file input, after accounting for repetitive content.
+5. **recreateTotal**
+If already known deletions and duplications are being used in the training data, this function skips the simulation of CNVs and instead generates a file with positions where CNVs should be, for simChrs.
+6. **simChr**
+Masks known repetitive content in the given chromosome and generates chromosomes with simulated CNVs.
+7. **classify**
+Given a training file (generated in formatTrain) and a sample file (generated in formatSample), will predicted windows with CNVs based on coverage and standard deviation of coverage.
+8. **predict**
+Given a training file (generated in formatTrain) and a sample file (generated in formatSample), will predicted windows with CNVs based on coverage and standard deviation of coverage.
+9. **simReads**
+Simulates read pairs of chosen length to a certain coverage of the chosen chromosome, requires WGsim.
+10. **subTrain**
+Downsample a training file by a certain percentage or to a certain number of each category. 
+11. **summarize**
+Combines called CNVs, and if known CNVs are provided, tells you if called CNVs are True-positives or otherwise.
+12. **winStatExtra**
+Creates summary windows based on known coverage estimates.
+13. **covSummary**
+Summarizes the coverage of each chromosome in the genomeCoverageBed file.
+
+# 4. Input file formats
+## Fasta
+The reference sequences for mapping and for generating training files, in the following format:
+>\>Chr1
+
+>aagagcctatatca
+
+>\>Chr2
+
+>aagagcctatatca
+
+## BAM files
+A binary file containing short reads mapped to a repeat masked reference genome, used as input for genomeCoverageBed within dudeML.
+
+
+## Duplications
+A bed file of known (or simulated) duplications, with the number of copies per chromosome and the frequency of the duplication in the sampled data (e.g. the number of chromosomes with this duplication/ the total number of chromosomes):
+>Chr1	1000	1344	dup	3	1.0
+
+>Chr1	2455	6700	dup	2	0.5
+
+>Chr1	34501	36119	dup	2	1.0
+
+>Chr1	45117	48932	dup	4	0.5
+
+## Deletions
+A bed file of known (or simulated) deletions, with the number of copies per chromosome and the frequency of the deletion in the sampled data (e.g. the number of chromosomes with this deletion/ the total number of chromosomes):
+>Chr1	1000	1344	del	0	1.0
+
+>Chr1	2455	6700	del	0	0.5
+
+>Chr1	34501	36119	del	0	1.0
+
+>Chr1	45117	48932	del	0	0.5
+
+## Fvec files
+A type of bed file, containing information on CNVs and copy number if a training file, and containing strain ID if a sample file. Reformats the bedfile from winStat to a feature vector, summarizing the windows around the focal window.
+>2L	22240500	22240550	N	1.0	0.64	0.151	0.92	0.071	1.04	0.134	1.04	0.101	1.2	0.075	1.12	0.112	1.44	0.132	1.12	0.168	1.12	0.124	1.6	0.163	1.42	0.145
