@@ -25,6 +25,9 @@ ONE TIME SETUPS:
 	conda install -c biopython -n dudeml wgsim bwa samtools bedtools
 	conda install -n dudeml -c bioconda samtools=1.11 --force-reinstall
 	
+To get help manual:
+
+    	python3 dudeML.py help
 
 # 2. A simple walkthrough
 ## A. Simulate training data
@@ -75,6 +78,7 @@ Creating Train/Test datasets
 
 ## D. Predicting CNVs using the generated files.  
 Following this, I created a classifier from one of the training features vector files generated and test out predictions of CNVs in the other file.
+Predicting also calculates confusion marix for us abd displays
 
 	python3 dudeML.py classify -i train_sim/total_50train.bed -o train_sim/total_50train.sav
 	python3 dudeML.py predict -i test_sim/total_50sample.bed -t train_sim/total_50train.sav -o test_sim/total_50pred.bed
